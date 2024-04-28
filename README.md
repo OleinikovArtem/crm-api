@@ -1,73 +1,95 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+## Contents of the documentation:
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+1. [Install dependencies](#install-dependencies)
+2. [Database](#Database)
+3. [Docker](#Docker)
+4. [Errors and Solutions](#errors-and-solions)
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## Install dependencies
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
-
-```bash
-$ yarn install
+```cmd
+npm install
 ```
 
-## Running the app
+---
 
-```bash
-# development
-$ yarn run start
+## Database 
 
-# watch mode
-$ yarn run start:dev
+To create a database migration, you need to run the database and then change this:
 
-# production mode
-$ yarn run start:prod
+```
+POSTGRES_HOST="postgres"
+POSTGRES_PORT="5432"
 ```
 
-## Test
+to this:
 
-```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+```
+POSTGRES_HOST="localhost"
+POSTGRES_PORT="5433" - it should be (left value) from postgers.ports in the docker-compose.yml file
 ```
 
-## Support
+then
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```
+npx prisma migration --name MIGRATION-NAME
+```
 
-## Stay in touch
+## Docker
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Run docker container (Don't forget to run the docker application first)
 
-## License
+for create bucket for minio files:
+```cmd
+docker volume create minio-volume 
+```
 
-Nest is [MIT licensed](LICENSE).
+
+everything will be cleaned up as first start:
+```cmd
+docker-compose up --build -V 
+```
+
+for develop mode:
+```cmd
+docker-compose up
+```
+
+Then open http://localhost:9001 - there is admin panel for local file-bucket
+`MINIO_ROOT_USER="minioadmin"
+MINIO_ROOT_PASSWORD="minioadmin"`
+
+**Then** choose the AccessKeys => create Access keys and save it to `.env` file
+then restart your app `docker-compose down` -> `docker-compose up`
+
+And now you will be able to see the image that you uploaded to the bucket.
+
+---
+
+## ERRORS AND SOLUTIONS
+
+### Docker:
+
+If you see this ERROR message when you're trying to start the project:
+
+```
+Error response from daemon: Ports are not available: exposing port TCP 0.0.0.0:5432 -> 0.0.0.0:0: listen tcp 0.0.0.0:5432: bind: address already in use
+```
+
+you need increase the port number in `docker-compose.yml`, at the postgres service section
+
+```yaml
+  postgres:
+    image: postgres
+    restart: always
+    # ... something ...
+    ports:
+      - '5432:5432' # HERE examples (5433:5432' | 5434:5432' | 5435:5432')
+    # ... something ...
+
+```
+
+---
+
