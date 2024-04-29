@@ -4,13 +4,9 @@ services:
   api:
     build:
       context: .
-      dockerfile: Dockerfile.dev
-      target: development
+      dockerfile: Dockerfile.prod
     env_file:
       - .env
-    volumes:
-      - .:/usr/src/app
-    command: npm run start:dev
     ports:
       - 8080:8080
     depends_on:

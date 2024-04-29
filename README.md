@@ -71,6 +71,15 @@ And now you will be able to see the image that you uploaded to the bucket.
 ## ERRORS AND SOLUTIONS
 
 ### Docker:
+run DEV:
+```cmd
+docker-compose up
+```
+
+run PROD:
+```cmd
+docker-compose -f docker-compose.prod.yml up
+```
 
 If you see this ERROR message when you're trying to start the project:
 
