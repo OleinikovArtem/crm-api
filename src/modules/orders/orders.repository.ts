@@ -4,13 +4,16 @@ import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class OrdersRepository {
-  constructor(private prisma: PrismaService) {
-  }
+  constructor(private prisma: PrismaService) {}
 
   async createOrder(data: Prisma.OrderCreateInput) {
     return this.prisma.order.create({
       data,
-      include: { products: { include: { product: true } }, billingInfo: true, customer: true },
+      include: {
+        products: { include: { product: true } },
+        billingInfo: true,
+        customer: true,
+      },
     });
   }
 
@@ -19,7 +22,10 @@ export class OrdersRepository {
   }
 
   getOrderById(id: string) {
-    return this.prisma.order.findFirstOrThrow({ where: { id }, include: { products: true } });
+    return this.prisma.order.findFirstOrThrow({
+      where: { id },
+      include: { products: true },
+    });
   }
 
   async getCount(params?: {
@@ -39,7 +45,12 @@ export class OrdersRepository {
   }) {
     return this.prisma.order.findMany({
       ...params,
-      include: { products: { include: { product: true } }, billingInfo: true, customer: true, _count: true },
+      include: {
+        products: { include: { product: true } },
+        billingInfo: true,
+        customer: true,
+        _count: true,
+      },
     });
   }
 }

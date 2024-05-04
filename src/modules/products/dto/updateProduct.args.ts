@@ -9,7 +9,3 @@ export class UpdateProductArgs extends CreateProductArgs {
   @Field(() => Boolean, { nullable: true })
   isPublished: boolean;
 }
-
-
-
-

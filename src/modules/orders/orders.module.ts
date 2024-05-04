@@ -9,6 +9,6 @@ import { ProductsModule } from '../products/products.module';
 @Module({
   imports: [PrismaModule, ProductsModule],
   providers: [OrdersRepository, OrdersService, OrdersResolver],
-  exports: [OrdersService]
+  exports: [OrdersService],
 })
 export class OrdersModule {}

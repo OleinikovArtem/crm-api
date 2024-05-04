@@ -4,8 +4,7 @@ import { Prisma, User } from '@prisma/client';
 
 @Injectable()
 export class UsersRepository {
-  constructor(private prisma: PrismaService) {
-  }
+  constructor(private prisma: PrismaService) {}
 
   async findOne({ email, id }: Prisma.UserWhereUniqueInput) {
     if (!email && !id) return null;

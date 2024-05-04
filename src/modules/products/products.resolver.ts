@@ -8,16 +8,17 @@ import { Product } from './products.model';
 import { ProductsService } from './products.service';
 
 // DTO
-import { GetProductsWithPaginationArgs, ProductsOutput } from './dto/getProducts.args';
+import {
+  GetProductsWithPaginationArgs,
+  ProductsOutput,
+} from './dto/getProducts.args';
 import { GetProductArgs } from './dto/getProduct.args';
 import { CreateProductArgs } from './dto/createProduct.args';
 import { UpdateProductArgs } from './dto/updateProduct.args';
 
-
 @Resolver()
 export class ProductResolver {
-  constructor(private readonly productsService: ProductsService) {
-  }
+  constructor(private readonly productsService: ProductsService) {}
 
   @Query(() => ProductsOutput, { name: 'products' })
   async getProducts(@Args() args: GetProductsWithPaginationArgs) {
@@ -28,7 +29,6 @@ export class ProductResolver {
   async getProduct(@Args() args: GetProductArgs) {
     return this.productsService.getProductById(args.id);
   }
-
 
   @Mutation(() => Product)
   @UseGuards(RoleGuard([ROLE.ADMIN]))

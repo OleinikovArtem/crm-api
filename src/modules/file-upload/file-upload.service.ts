@@ -4,10 +4,7 @@ import { BufferedFile } from 'src/modules/minio-client/file.model';
 
 @Injectable()
 export class FileUploadService {
-  constructor(
-    private minioClientService: MinioClientService,
-  ) {
-  }
+  constructor(private minioClientService: MinioClientService) {}
 
   async uploadSingle(file: BufferedFile) {
     try {
@@ -24,13 +21,11 @@ export class FileUploadService {
       };
     } catch (error) {
       console.log(error);
-      throw new error
+      throw new error();
     }
   }
 
   async uploadMultiple(images: BufferedFile[]) {
-    return Promise.allSettled(
-      images.map(image => this.uploadSingle(image)),
-    );
+    return Promise.allSettled(images.map((image) => this.uploadSingle(image)));
   }
 }

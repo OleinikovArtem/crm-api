@@ -17,5 +17,5 @@ export class Category {
   updatedAt: CategoryDB['updatedAt'];
 
   @Field(() => [Product], { nullable: true })
-  products: Product[]
+  products: Product[];
 }

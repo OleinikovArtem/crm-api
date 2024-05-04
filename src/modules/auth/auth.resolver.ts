@@ -6,8 +6,7 @@ import { User } from '@modules/users/user.model';
 
 @Resolver()
 export class AuthResolver {
-  constructor(private readonly authService: AuthService) {
-  }
+  constructor(private readonly authService: AuthService) {}
 
   @Mutation(() => AuthResponse, { name: 'login' })
   async login(
@@ -28,9 +27,7 @@ export class AuthResolver {
 
   // TODO remove
   @Mutation(() => User, { name: 'makeAdmin' })
-  async makeAdmin(
-    @Args({ name: 'email', type: () => String! }) email: string,
-  ) {
+  async makeAdmin(@Args({ name: 'email', type: () => String! }) email: string) {
     return this.authService.makeAdmin(email);
   }
 

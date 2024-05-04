@@ -4,7 +4,7 @@
   "author": "Artem Oleinikov <artem.oleinikov.web@gmail.com>",
   "private": true,
   "prisma": {
-    "schema": "src/database/schema.prisma"
+    "schema": "./prisma/schema.prisma"
   },
   "scripts": {
     "build": "nest build",
@@ -28,6 +28,7 @@
     "@nestjs/graphql": "^12.1.1",
     "@nestjs/jwt": "^10.2.0",
     "@nestjs/platform-express": "^10.3.8",
+    "@nestjs/swagger": "^7.3.1",
     "@prisma/client": "^5.13.0",
     "apollo-server-express": "^3.13.0",
     "bcryptjs": "^2.4.3",

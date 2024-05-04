@@ -1,10 +1,19 @@
-import { Injectable, UnauthorizedException, BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 
 import { UsersService } from 'src/modules/users/users.service';
-import { CreateTokensInput, SignInInput, SignUpInput, Tokens } from './auth.types';
-
+import {
+  CreateTokensInput,
+  SignInInput,
+  SignUpInput,
+  Tokens,
+} from './auth.types';
 
 import { authConfig } from 'src/config/auth.config';
 
@@ -15,8 +24,7 @@ export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
-  ) {
-  }
+  ) {}
 
   async singUp({ email, password, name }: SignUpInput): Promise<Tokens> {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -26,7 +34,11 @@ export class AuthService {
     const existUser = await this.usersService.findByEmail(email);
     if (existUser) throw new BadRequestException('The user already exists');
 
-    const newUser = await this.usersService.createUser({ email, password, name });
+    const newUser = await this.usersService.createUser({
+      email,
+      password,
+      name,
+    });
 
     const payload = this.createPayloadForCreateTokens(newUser);
 
@@ -35,7 +47,10 @@ export class AuthService {
 
   async signIn({ email, password }: SignInInput): Promise<Tokens> {
     const user = await this.usersService.findByEmail(email);
-    const isValidPassword = await this.usersService.comparePassword(user?.password, password);
+    const isValidPassword = await this.usersService.comparePassword(
+      user?.password,
+      password,
+    );
 
     if (!user || !isValidPassword) throw new UnauthorizedException();
 
@@ -46,7 +61,9 @@ export class AuthService {
 
   async refreshToken(token: string): Promise<Tokens> {
     try {
-      const result = await this.jwtService.verify(token, { secret: refresh_token_secret_key });
+      const result = await this.jwtService.verify(token, {
+        secret: refresh_token_secret_key,
+      });
       const user = await this.usersService.findById(result.sub);
 
       if (!user) throw new UnauthorizedException();
@@ -69,7 +86,10 @@ export class AuthService {
     return await this.usersService.makeAdmin(email);
   }
 
-  private async createTokens({ refreshPayload, accessPayload }: CreateTokensInput): Promise<Tokens> {
+  private async createTokens({
+    refreshPayload,
+    accessPayload,
+  }: CreateTokensInput): Promise<Tokens> {
     return {
       access_token: await this.jwtService.signAsync(accessPayload, {
         secret: access_token_secret_key,
@@ -83,7 +103,12 @@ export class AuthService {
   }
 
   private createPayloadForCreateTokens(user: User): CreateTokensInput {
-    const accessPayload = { sub: user.id, email: user.email, name: user.name, role: user.role } as const;
+    const accessPayload = {
+      sub: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role,
+    } as const;
     const refreshPayload = { sub: user.id };
 
     return {

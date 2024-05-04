@@ -1,5 +1,5 @@
  # Build stage
-FROM node:18 AS build
+FROM node:lts-alpine AS build
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -27,7 +27,7 @@ ENV NODE_ENV production
 RUN npm ci --only=production && npm cache clean --force
 
 # Production stage
-FROM node:18 AS production
+FROM node:lts-alpine AS production
 
 WORKDIR /usr/src/app
 

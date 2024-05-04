@@ -11,5 +11,4 @@ export class GetProductsWithPaginationArgs extends PaginationArgs {
   categories?: string[];
 }
 
-
 export const ProductsOutput = GeneratePaginationOutput<Product>(Product);

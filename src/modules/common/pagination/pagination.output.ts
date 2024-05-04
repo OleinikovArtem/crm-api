@@ -4,16 +4,16 @@ import { Type } from '@nestjs/common';
 export function GeneratePaginationOutput<T>(classRef: Type<T>) {
   @ObjectType({ isAbstract: true })
   abstract class GenericPaginationOutput {
-    @Field(type => Int)
+    @Field((type) => Int)
     totalCount: number;
 
-    @Field(type => Int)
+    @Field((type) => Int)
     totalPages: number;
 
-    @Field(type => Int)
+    @Field((type) => Int)
     currentPage: number;
 
-    @Field(type => [classRef])
+    @Field((type) => [classRef])
     items?: T[];
   }
 

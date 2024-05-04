@@ -8,8 +8,7 @@ import { CreateOrderArgs } from './dto/createOrder.args';
 
 @Resolver()
 export class OrdersResolver {
-  constructor(private orderService: OrdersService) {
-  }
+  constructor(private orderService: OrdersService) {}
 
   @Query(() => OrderOutput, { name: 'orders' })
   async getOrders(@Args() args: GetOrdersWithPaginationArgs) {
@@ -20,7 +19,6 @@ export class OrdersResolver {
   async getOrder(@Args('id') id: string) {
     return this.orderService.getOrderById(id);
   }
-
 
   @Mutation(() => Order)
   async createOrder(@Args() args: CreateOrderArgs) {

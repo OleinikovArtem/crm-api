@@ -10,8 +10,7 @@ import { UserWithoutPassword } from '@modules/users/user.model';
 
 @Injectable()
 export class UsersService {
-  constructor(private repository: UsersRepository) {
-  }
+  constructor(private repository: UsersRepository) {}
 
   async findByEmail(email: string) {
     return this.repository.findOne({ email });
@@ -25,7 +24,9 @@ export class UsersService {
     return this.repository.findOne({ id });
   }
 
-  async getUsers(params: GetUsersWithPaginationArgs): Promise<PaginationOutput<User>> {
+  async getUsers(
+    params: GetUsersWithPaginationArgs,
+  ): Promise<PaginationOutput<User>> {
     const { page, limit } = params;
     const where: Prisma.UserWhereInput = {};
 
@@ -34,8 +35,8 @@ export class UsersService {
       take: limit,
       where,
       orderBy: {
-        createdAt: 'desc'
-      }
+        createdAt: 'desc',
+      },
     });
     const totalCountReq = this.repository.getCount({ where });
 
@@ -47,7 +48,11 @@ export class UsersService {
     };
   }
 
-  async createUser(inputData: { email: string, password: string, name: string }) {
+  async createUser(inputData: {
+    email: string;
+    password: string;
+    name: string;
+  }) {
     const password = await this.hashPassword(inputData.password);
     const data = { ...inputData, password };
 

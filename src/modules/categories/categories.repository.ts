@@ -4,8 +4,7 @@ import { Category } from '@prisma/client';
 
 @Injectable()
 export class CategoriesRepository {
-  constructor(private prisma: PrismaService) {
-  }
+  constructor(private prisma: PrismaService) {}
 
   async getCategories(): Promise<Category[]> {
     return this.prisma.category.findMany();

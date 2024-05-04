@@ -11,8 +11,7 @@ import { calculatePagination } from '@pagination/pagination.utils';
 
 @Injectable()
 export class ProductsService {
-  constructor(private repository: ProductsRepository) {
-  }
+  constructor(private repository: ProductsRepository) {}
 
   async createProduct(params: CreateProductArgs) {
     const { categories, ...data } = params;
@@ -28,7 +27,10 @@ export class ProductsService {
 
     return this.repository.updateProduct({
       where: { id },
-      data: { ...data, ...this.createConnectOrCreateObjectForCategories(categories) },
+      data: {
+        ...data,
+        ...this.createConnectOrCreateObjectForCategories(categories),
+      },
     });
   }
 
@@ -36,13 +38,16 @@ export class ProductsService {
     return this.repository.getProductById(id);
   }
 
-
-  async getProducts(params: GetProductsWithPaginationArgs): Promise<PaginationOutput<Product>> {
+  async getProducts(
+    params: GetProductsWithPaginationArgs,
+  ): Promise<PaginationOutput<Product>> {
     const { page, limit, categories } = params;
     const where: Prisma.ProductWhereInput = {};
 
     if (categories?.length) {
-      where.categories = { some: { OR: categories?.map(category => ({ name: category })) } };
+      where.categories = {
+        some: { OR: categories?.map((category) => ({ name: category })) },
+      };
     }
 
     const itemsReq = this.repository.getProducts({
@@ -50,8 +55,8 @@ export class ProductsService {
       take: limit,
       where,
       orderBy: {
-        createdAt: 'desc'
-      }
+        createdAt: 'desc',
+      },
     });
     const totalCountReq = this.repository.getCount({ where });
 
@@ -63,7 +68,9 @@ export class ProductsService {
     };
   }
 
-  private createConnectOrCreateObjectForCategories(categories: string[] | undefined) {
+  private createConnectOrCreateObjectForCategories(
+    categories: string[] | undefined,
+  ) {
     if (!categories) return {};
 
     return {

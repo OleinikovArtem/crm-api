@@ -8,6 +8,6 @@ import { ProductResolver } from './products.resolver';
 @Module({
   imports: [PrismaModule],
   providers: [ProductsRepository, ProductsService, ProductResolver],
-  exports: [ProductsService]
+  exports: [ProductsService],
 })
 export class ProductsModule {}

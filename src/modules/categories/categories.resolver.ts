@@ -4,8 +4,7 @@ import { Category } from './categories.model';
 
 @Resolver()
 export class CategoriesResolver {
-  constructor(private readonly categoriesService: CategoriesService) {
-  }
+  constructor(private readonly categoriesService: CategoriesService) {}
 
   @Query(() => [Category], { name: 'categories' })
   async getCategories() {

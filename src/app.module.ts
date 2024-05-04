@@ -35,5 +35,4 @@ import { OrdersModule } from '@modules/orders/orders.module';
   controllers: [],
   providers: [],
 })
-export class AppModule {
-}
+export class AppModule {}

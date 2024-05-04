@@ -9,11 +9,13 @@ import { authConfig } from 'src/config/auth.config';
 
 @Module({
   providers: [AuthService, AuthResolver],
-  imports: [UsersModule, JwtModule.register({
-    global: true,
-    secret: authConfig().access_token_secret_key,
-    signOptions: { expiresIn: '1h' },
-  })],
+  imports: [
+    UsersModule,
+    JwtModule.register({
+      global: true,
+      secret: authConfig().access_token_secret_key,
+      signOptions: { expiresIn: '1h' },
+    }),
+  ],
 })
-export class AuthModule {
-}
+export class AuthModule {}

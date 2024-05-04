@@ -1,6 +1,10 @@
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 
-import { UnauthorizedException, BadRequestException, UseGuards } from '@nestjs/common';
+import {
+  UnauthorizedException,
+  BadRequestException,
+  UseGuards,
+} from '@nestjs/common';
 import { RoleGuard } from '@modules/auth/role.guard';
 
 import { RequestWithUser } from '@modules/auth/auth.types';
@@ -8,12 +12,15 @@ import { ROLE } from '.prisma/client';
 
 import { User, UserWithoutPassword } from './user.model';
 import { UsersService } from './users.service';
-import { GetUserByEmail, GetUsersWithPaginationArgs, UsersOutput } from '@modules/users/dto/getUsers.args';
+import {
+  GetUserByEmail,
+  GetUsersWithPaginationArgs,
+  UsersOutput,
+} from '@modules/users/dto/getUsers.args';
 
 @Resolver()
 export class UsersResolver {
-  constructor(private readonly usersService: UsersService) {
-  }
+  constructor(private readonly usersService: UsersService) {}
 
   // @UseGuards(RoleGuard([ROLE.EMPLOYEE, ROLE.ADMIN, ROLE.CLIENT]))
   // @Mutation(() => UserWithoutPassword, { name: 'profile' })

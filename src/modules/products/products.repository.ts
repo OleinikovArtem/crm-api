@@ -4,11 +4,13 @@ import { Prisma, Product } from '@prisma/client';
 
 @Injectable()
 export class ProductsRepository {
-  constructor(private prisma: PrismaService) {
-  }
+  constructor(private prisma: PrismaService) {}
 
   async getProductById(id: string): Promise<Product | null> {
-    return this.prisma.product.findUnique({ where: { id }, include: { categories: true } });
+    return this.prisma.product.findUnique({
+      where: { id },
+      include: { categories: true },
+    });
   }
 
   async getProducts(params: {
@@ -18,7 +20,10 @@ export class ProductsRepository {
     where?: Prisma.ProductWhereInput;
     orderBy?: Prisma.ProductOrderByWithRelationInput;
   }): Promise<Product[]> {
-    return this.prisma.product.findMany({ ...params, include: { categories: true } });
+    return this.prisma.product.findMany({
+      ...params,
+      include: { categories: true },
+    });
   }
 
   async getCount(params?: {

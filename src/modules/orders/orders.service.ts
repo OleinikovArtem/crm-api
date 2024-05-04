@@ -15,15 +15,18 @@ export class OrdersService {
   constructor(
     private repository: OrdersRepository,
     private productsService: ProductsService,
-  ) {
-  }
+  ) {}
 
   async createOrder(params: CreateOrderArgs) {
     for (const productInput of params.products) {
-      const product = await this.productsService.getProductById(productInput.productId);
+      const product = await this.productsService.getProductById(
+        productInput.productId,
+      );
 
       if (!product) {
-        throw new NotFoundException(`Product with ID ${productInput.productId} not found.`);
+        throw new NotFoundException(
+          `Product with ID ${productInput.productId} not found.`,
+        );
       }
     }
 
@@ -40,12 +43,13 @@ export class OrdersService {
     });
   }
 
-
   async getOrderById(id: string) {
     return this.repository.getOrderById(id);
   }
 
-  async getOrders(params: GetOrdersWithPaginationArgs): Promise<PaginationOutput<Order>> {
+  async getOrders(
+    params: GetOrdersWithPaginationArgs,
+  ): Promise<PaginationOutput<Order>> {
     const { page, limit, email } = params;
     const where: Prisma.OrderWhereInput = {};
 

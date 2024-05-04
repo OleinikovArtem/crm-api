@@ -1,4 +1,10 @@
-import { Field, Float, GraphQLISODateTime, Int, ObjectType } from '@nestjs/graphql';
+import {
+  Field,
+  Float,
+  GraphQLISODateTime,
+  Int,
+  ObjectType,
+} from '@nestjs/graphql';
 import { Product as ProductDB } from '@prisma/client';
 import { Category } from '@modules/categories/categories.model';
 
@@ -32,5 +38,5 @@ export class Product {
   count: ProductDB['count'];
 
   @Field(() => [Category], { nullable: true })
-  categories: Category[]
+  categories: Category[];
 }

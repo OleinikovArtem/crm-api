@@ -1,4 +1,9 @@
-import { Field, GraphQLISODateTime, InputType, ObjectType } from '@nestjs/graphql';
+import {
+  Field,
+  GraphQLISODateTime,
+  InputType,
+  ObjectType,
+} from '@nestjs/graphql';
 import { User as UserDB } from '.prisma/client';
 
 @ObjectType()
@@ -36,4 +41,3 @@ export class User extends UserWithoutPassword {
   @Field(() => String)
   password: UserDB['password'];
 }
-
