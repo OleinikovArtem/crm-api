@@ -16,3 +16,4 @@ jobs:
           aws_default_region: eu-north-1
 
           aws_elb_app_port: 8080
+          ansible_skip: true
