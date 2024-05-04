@@ -26,42 +26,48 @@ USER node
 # BUILD FOR PRODUCTION
 ###################
 
-FROM node:lts-alpine As build
+FROM node:lts-alpine AS build
 
+# Create app directory
 WORKDIR /usr/src/app
 
-COPY --chown=node:node package*.json ./
+# Copy package files
+COPY package*.json ./
 
-# In order to run `npm run build` we need access to the Nest CLI.
-# The Nest CLI is a dev dependency,
-# In the previous development stage we ran `npm ci` which installed all dependencies.
-# So we can copy over the node_modules directory from the development image into this build image.
-COPY --chown=node:node --from=development /usr/src/app/node_modules ./node_modules
+# Install dependencies including 'devDependencies'
+RUN npm ci
 
-COPY --chown=node:node . .
+# Install Prisma CLI globally
+RUN npm install -g prisma
 
-# Run the build command which creates the production bundle
+# Copy Prisma schema file from the correct location and generate Prisma client
+COPY src/database/schema.prisma ./prisma/
+RUN prisma generate --schema=./prisma/schema.prisma
+
+# Copy the rest of the application source code
+COPY . .
+
+# Build the application
 RUN npm run build
 
-# Set NODE_ENV environment variable
-ENV NODE_ENV production
-
-# Running `npm ci` removes the existing node_modules directory.
-# Passing in --only=production ensures that only the production dependencies are installed.
-# This ensures that the node_modules directory is as optimized as possible.
+# Remove 'devDependencies' after building
 RUN npm ci --only=production && npm cache clean --force
 
+# Stage 2: Setup the production environment
+FROM node:lts-alpine AS production
+
+# Create app directory
+WORKDIR /usr/src/app
+
+# Copy built node modules and build directory from the build stage
+COPY --from=build /usr/src/app/node_modules ./node_modules
+COPY --from=build /usr/src/app/dist ./dist
+
+# Set environment to production
+ENV NODE_ENV=production
+
+# Run the application using non-root user for better security
 USER node
 
-###################
-# PRODUCTION
-###################
-
-FROM node:18-alpine As production
-
-# Copy the bundled code from the build stage to the production image
-COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
-COPY --chown=node:node --from=build /usr/src/app/dist ./dist
-
-# Start the server using the production build
-CMD [ "node", "dist/main.js" ]
+# Start the server
+CMD ["node", "dist/main.js"]
