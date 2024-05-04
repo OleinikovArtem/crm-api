@@ -32,6 +32,8 @@ jobs:
           REGISTRY_ALIAS: c6d3g1j9
           REPOSITORY: crm-api
           IMAGE_TAG: crm-api
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           docker build -t $IMAGE_TAG .
           docker tag $IMAGE_TAG:latest $REGISTRY/$REGISTRY_ALIAS/$IMAGE_TAG:latest
