@@ -30,8 +30,8 @@ jobs:
         env:
           REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
           REGISTRY_ALIAS: e2b3j8w6
-          REPOSITORY: nestjs-api
-          IMAGE_TAG: nestjs-api
+          REPOSITORY: crm-api
+          IMAGE_TAG: crm-api
         run: |
           docker build -t $IMAGE_TAG .
           docker tag $IMAGE_TAG:latest $REGISTRY/$REGISTRY_ALIAS/$IMAGE_TAG:latest

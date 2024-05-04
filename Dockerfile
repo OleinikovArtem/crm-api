@@ -35,7 +35,7 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # Install dependencies including 'devDependencies'
-RUN npm ci
+RUN npm ci --omit=dev
 
 # Install Prisma CLI globally
 RUN npm install -g prisma
