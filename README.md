@@ -35,7 +35,7 @@ for develop mode:
 docker-compose up
 ```
 
-### First start locale (Manual way to init the database)
+### Helpers
 
 Open docer container
 
