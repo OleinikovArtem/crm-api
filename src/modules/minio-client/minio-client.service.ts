@@ -29,12 +29,12 @@ export class MinioClientService {
       if (!(file.mimetype.includes('jpeg') || file.mimetype.includes('png'))) {
         throw new HttpException('Error uploading file', HttpStatus.BAD_REQUEST);
       }
-      let temp_filename = Date.now().toString();
-      let hashedFileName = crypto
+      const temp_filename = Date.now().toString();
+      const hashedFileName = crypto
         .createHash('md5')
         .update(temp_filename)
         .digest('hex');
-      let ext = file.originalname.substring(
+      const ext = file.originalname.substring(
         file.originalname.lastIndexOf('.'),
         file.originalname.length,
       );
@@ -42,7 +42,7 @@ export class MinioClientService {
         'Content-Type': file.mimetype,
         // 'X-Amz-Meta-Testing': 1234,
       };
-      let filename = hashedFileName + ext;
+      const filename = hashedFileName + ext;
       const fileName: string = `${filename}`;
       const fileBuffer = file.buffer;
 
