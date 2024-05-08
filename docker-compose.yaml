@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+  api:
+    build: ./
+    container_name: api
+    env_file:
+      - .env
+    command: ["printenv"]  # Temporarily override to print environment variables
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+    networks:
+      - api_network
+    entrypoint: "./entrypoint.sh"
+  
+
+  postgres:
+    image: postgres
+    container_name: postgres
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - '5433:5432'
+    networks:
+      - api_network
+
+networks:
+  api_network:
+    driver: bridge
+
+volumes:
+  postgres:
