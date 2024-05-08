@@ -53,4 +53,4 @@ jobs:
  
       - name: Update ECS service
         run: |
-          aws ecs update-service--service nestjs_app --task-definition crm-api-task --force-new-deployment
+          aws ecs update-service 
