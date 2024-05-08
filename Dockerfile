@@ -14,7 +14,6 @@ RUN prisma generate --schema=./prisma/schema.prisma
 COPY . .
 
 RUN npm run build
-# RUN npx prisma migrate dev
 
 # prod stage
 FROM node:18-alpine
